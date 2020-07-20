@@ -1,0 +1,61 @@
+server:
+  port: 9091
+  servlet:
+    context-path: /activemq
+
+spring:
+  profiles:
+    active: @profile.active@
+  datasource:
+    initialSize: 5
+    minIdle: 1
+    maxActive: 50
+    maxWait: 60000
+    timeBetweenEvictionRunsMills: 60000
+    minEvictableIdleTimeMills: 300000
+    validationQuery: select 1 from dual
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: false
+    filters: stat,wall
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    useGlobalDataSourceStat: true
+    type: com.alibaba.druid.pool.DruidDataSource
+  #activemq配置
+  activemq:
+    #在考虑结束之前等待的时间
+    close-timeout: 15s
+    #默认代理url是否应该在内存中。如果指定了显式代理，则忽略此值
+    in-memory: true
+    #是否在回滚消息之前停止消息传递，这意味着当启用此命令是，消息顺序不会被保留
+    non-blocking-redelivery: false
+    #等待消息发送相应的时间，设置为0等待永远
+    send-timeout: 0
+    queue-name: active.queue
+    topic-name: active.topic.name.model
+
+    pool:
+      enabled: true
+      #连接池最大连接数
+      max-connections: 10
+      #空闲的连接过期时间，默认是30秒
+      idle-timeout: 30000
+
+
+mybatis-plus:
+  mapper-locations: classpath:top/inson/dao/mappers/*.xml
+  #实体bean扫描
+  type-aliases-package: top.inson.entity
+  global-config:
+    #主键类型 0：数据库id自增 1.用户输入id 2.全局唯一id（数字类型唯一id）3.全局唯一id UUID
+    id-type: 0
+    #字段策略 0：忽略判断 1.非null判断 2.非空判断
+    field-strategy: 1
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    jdbc-type-for-null: 'null'
+
+logging:
+  config: classpath:logback-black.xml
